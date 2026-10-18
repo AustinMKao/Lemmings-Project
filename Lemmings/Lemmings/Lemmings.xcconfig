@@ -1,0 +1,22 @@
+//
+//  Lemmings.xcconfig
+//  Lemmings
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+
+SFML_ROOT[arch=arm64] = /opt/homebrew
+SFML_ROOT[arch=x86_64] = /usr/local
+
+HEADER_SEARCH_PATHS = $(inherited) $(SFML_ROOT)/include
+LIBRARY_SEARCH_PATHS = $(inherited) $(SFML_ROOT)/lib
+OTHER_LDFLAGS = $(inherited) -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+LD_RUNPATH_SEARCH_PATHS = $(inherited) $(SFML_ROOT)/lib
+
+// This eliminates warnings about three places where comments in SFML's
+// Event.hpp says \tparam `TEventSubtype` with extraneous backticks, and a
+// comment in Vulkan.hpp says \param requireGraphics with no following text
+
+WARNING_CFLAGS = $(inherited) -Wno-documentation
+

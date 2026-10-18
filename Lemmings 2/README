@@ -1,0 +1,8 @@
+This is how to build Lemmings in a macOS Terminal window, assuming
+you've already installed the SFML package.
+
+1. Download the Mac command line skeleton for Lemmings and unzip it.
+2. To build the program, change into the Lemmings directory and type
+		make
+3. To run the program, type
+		./lemmings
