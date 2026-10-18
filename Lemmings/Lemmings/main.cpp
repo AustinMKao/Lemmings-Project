@@ -9,7 +9,7 @@ using namespace std;
   // replace the string literal with a full path name to the directory,
   // e.g., "C:/CS32/Lemmings/Assets" or "/Users/fred/cs32/Lemmings/Assets"
 
-string assetDirectory = "***REMOVED***";
+string assetDirectory = "./Assets/"; //Relative path to assets for local development builds
 
 class GameWorld;
 
