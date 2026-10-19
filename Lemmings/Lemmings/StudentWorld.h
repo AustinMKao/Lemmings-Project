@@ -37,12 +37,11 @@ class StudentWorld : public GameWorld
         bool findIceMonster(Coord c);
     private:
         std::vector<Actor*> a;
+        std::vector<Actor*> pending;
         Actor* builder;
         int time;
         std::string tools;
         int lemmingsDied;
-        Actor* temp;
-        Actor* addLemming;
         int lemmingsSave;
 };
 

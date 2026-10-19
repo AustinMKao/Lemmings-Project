@@ -12,11 +12,8 @@ GameWorld* createStudentWorld(string assetPath)
     return new StudentWorld(assetPath);
 }
 
-// Students:  Add code to this file, StudentWorld.h, Actor.h, and Actor.cpp
-// Do not change or remove the createStudentWorld implementation above.
-
 StudentWorld::StudentWorld(string assetPath)
-: GameWorld(assetPath), time(2000), tools(""), temp(nullptr), addLemming(nullptr), builder(nullptr), lemmingsDied(0), lemmingsSave(0)
+: GameWorld(assetPath), time(2000), tools(""), builder(nullptr), lemmingsDied(0), lemmingsSave(0)
 {}
 
 StudentWorld::~StudentWorld()
@@ -106,16 +103,11 @@ int StudentWorld::move()
 {
     time -= ANIMATION_POSITIONS_PER_TICK;
     builder->doSomething();
-    if(temp != nullptr)
+    for(Actor* p : pending)
     {
-        a.push_back(temp);
-        temp = nullptr;
+        a.push_back(p);
     }
-    if(addLemming != nullptr)
-    {
-        a.push_back(addLemming);
-        addLemming = nullptr;
-    }
+    pending.clear();
     for(int i = 0; i < a.size(); i++)
     {
         a[i]->doSomething();
@@ -164,12 +156,15 @@ void StudentWorld::cleanUp()
         delete a[i];
     }
     a.clear();
+    for(Actor* p : pending)
+    {
+        delete p;
+    }
+    pending.clear();
     delete builder;
     builder = nullptr;
     lemmingsDied = 0;
     lemmingsSave = 0;
-    temp = nullptr;
-    addLemming = nullptr;
 }
 
 bool StudentWorld::notMove(Coord c)
@@ -210,32 +205,32 @@ void StudentWorld::placeActor(char key, Coord c)
     if(key == 'T')
     {
         Trampoline* t = new Trampoline(this, c);
-        temp = t;
+        pending.push_back(t);
     }
     else if(key == 'N')
     {
         Net* n = new Net(this, c);
-        temp = n;
+        pending.push_back(n);
     }
     else if(key == 'P')
     {
         Pheromone* p = new Pheromone(this, c);
-        temp = p;
+        pending.push_back(p);
     }
     else if(key == 'S')
     {
         Spring* s = new Spring(this, c);
-        temp = s;
+        pending.push_back(s);
     }
     else if(key == '<')
     {
         LeftDoor* ld = new LeftDoor(this, c);
-        temp = ld;
+        pending.push_back(ld);
     }
     else if(key == '>')
     {
         RightDoor* rd = new RightDoor(this, c);
-        temp = rd;
+        pending.push_back(rd);
     }
 }
 
@@ -263,7 +258,7 @@ bool StudentWorld::empty(Coord c)
 
 void StudentWorld::spawnLemming(Coord c)
 {
-    temp = new Lemming(this, c);
+    pending.push_back(new Lemming(this, c));
 }
 
 int StudentWorld::isAttractable(Coord c)
